@@ -1,5 +1,9 @@
 import { dispatch, handleEvent } from './codeMessageHandler';
-figma.showUI(__html__);
+figma.showUI(__html__, { width: 320, height: 400 });
+
+// handleEvent('resizeUI', () => {
+// 	// figma.ui.resize(320, 50)	
+// });
 
 
 // send

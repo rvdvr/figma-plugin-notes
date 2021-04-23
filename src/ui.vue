@@ -40,6 +40,9 @@ export default {
     });
   },
   methods: {
+    resizeUI() {
+      dispatch('resizeUI')
+    },
     updadeStorage() {
       dispatch('changeStorage', this.tasks);
     },
@@ -83,6 +86,5 @@ export default {
 .done {
   text-decoration: line-through;
   color: rgb(168, 168, 168);
-
 }
 </style>
