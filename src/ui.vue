@@ -1,17 +1,26 @@
 <template>
   <div>
     <div class="tasks__list">
-      <div class="tasks__item" v-for="(task, index) in tasks" :key="task.index">
+      <div class="tasks__item" v-for="(task, index) in tasks" :key="task.id">
         
-        <input type="checkbox" v-model="task.done" @change="updadeStorage">
-        <span v-if="!task.inputMode" :class="{done: task.done}">{{task.text}}</span>
-        <input v-else class="add-task__input" v-model="task.text" v-on:keyup.enter="saveEditedTask(index)">
+        <input type="checkbox" 
+          v-model="task.done" 
+          @change="updateStorage"
+        >
 
-        <span class="tasks__edit" @click="editTask(index)">⌘</span>
-        <span @click="removeTask(index)" class="add-task__remove">—</span>
+        <Editable 
+          v-if="!task.inputMode" 
+          :class="{done: task.done}"
+          :content="task.text"
+          :currentIndex="index"
+          @update="task.text = $event" 
+          @save="updateStorage"
+          @remove="removeTask"/>
 
+        <span @click="removeTask(index)" class="add-task__remove">–</span>
       </div>
     </div>
+
     <div class="add-task">
       <input class="add-task__input" v-model="newTask" v-on:keyup.enter="addTask">
       <button class="add-task__btn" @click="addTask">+</button>
@@ -21,6 +30,7 @@
 
 <script>
 import { dispatch, handleEvent } from "./uiMessageHandler";
+import Editable from "./components/contenteditable.vue";
 
 // Add these lines to import the interactive figma-ui components as needed.
 import "./figma-ui/js/selectMenu";
@@ -34,30 +44,51 @@ export default {
       tasks: [],
     };
   },
+  components: {
+    Editable
+  },
   mounted() {
     handleEvent("sendChangedStorage", tasks => {
       this.tasks = tasks;
     });
   },
+  computed: {
+
+  },
   methods: {
+    contentEdit(value, index) {
+      // const value = e.target.innerText
+      this.tasks[index] = value.innerText; 
+    },
+    endEdit(){
+      this.$el.querySelector('.contenteditable').blur()
+    },
+
     resizeUI() {
       dispatch('resizeUI')
     },
-    updadeStorage() {
+    updateStorage() {
       dispatch('changeStorage', this.tasks);
     },
     addTask() {
       if (this.newTask!==null) {
-        this.tasks.push({done: false, inputMode: false, text: `${this.newTask}`});
+        this.tasks.push(
+          {
+            id: Date.parse(new Date()),
+            done: false, 
+            inputMode: false, 
+            text: `${this.newTask}`
+          }
+        );
         
         this.newTask = null;
-        this.updadeStorage();
+        this.updateStorage();
       }
     },
     removeTask(index) {
       this.$delete(this.tasks, index);
 
-      this.updadeStorage();
+      this.updateStorage();
     },
     editTask(index) {
       this.tasks[index].inputMode = true;
@@ -65,7 +96,7 @@ export default {
     saveEditedTask(index) {
       this.tasks[index].inputMode = false;
 
-      this.updadeStorage();
+      this.updateStorage();
     }
   }
 };
