@@ -1,24 +1,26 @@
 <template>
   <div>
     <div class="tasks__list">
-      <div class="tasks__item" v-for="(task, index) in tasks" :key="task.id">
-        
-        <input type="checkbox" 
-          v-model="task.done" 
-          @change="updateStorage"
-        >
+      <draggable v-model="myArray" group="tasks" @start="drag=true" @end="drag=false">
+        <div class="tasks__item" v-for="(task, index) in tasks" :key="task.id">
+          
+          <input type="checkbox" 
+            v-model="task.done" 
+            @change="updateStorage"
+          >
 
-        <Editable 
-          v-if="!task.inputMode" 
-          :class="{done: task.done}"
-          :content="task.text"
-          :currentIndex="index"
-          @update="task.text = $event" 
-          @save="updateStorage"
-          @remove="removeTask"/>
+          <Editable 
+            v-if="!task.inputMode" 
+            :class="{done: task.done}"
+            :content="task.text"
+            :currentIndex="index"
+            @update="task.text = $event" 
+            @save="updateStorage"
+            @remove="removeTask"/>
 
-        <span @click="removeTask(index)" class="add-task__remove">–</span>
-      </div>
+          <span @click="removeTask(index)" class="add-task__remove">–</span>
+        </div>
+      </draggable>
     </div>
 
     <div class="add-task">
@@ -39,6 +41,7 @@
 <script>
 import { dispatch, handleEvent } from "./uiMessageHandler";
 import Editable from "./components/contenteditable.vue";
+import draggable from 'vuedraggable'
 
 // Add these lines to import the interactive figma-ui components as needed.
 import "./figma-ui/js/selectMenu";
@@ -53,7 +56,8 @@ export default {
     };
   },
   components: {
-    Editable
+    Editable,
+    draggable
   },
   mounted() {
     handleEvent("sendChangedStorage", tasks => {

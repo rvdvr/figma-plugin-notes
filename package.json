@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"firebase": "^8.4.1",
+		"vuedraggable": "^2.24.3",
 		"vuefire": "^3.0.0-alpha.2"
 	},
 	"devDependencies": {
