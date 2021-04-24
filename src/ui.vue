@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tasks__list">
-      <draggable v-model="myArray" group="tasks" @start="drag=true" @end="drag=false">
+      <draggable group="tasks" @start="drag=true" @end="drag=false">
         <div class="tasks__item" v-for="(task, index) in tasks" :key="task.id">
           
           <input type="checkbox" 
