@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  props:['content', 'currentIndex'],
+  props:['typeInput', 'content', 'currentIndex'],
   mounted(){
     this.$el.innerText = this.content;
   },
@@ -20,7 +20,13 @@ export default {
         this.$emit('remove', this.currentIndex);
       }
 
-      this.$emit('save');
+      if (this.typeInput === 'newTask') {
+        this.$el.innerText = null;
+        this.$emit('new');
+      } else {
+        this.$emit('save');
+      }
+
     }
   }
 }

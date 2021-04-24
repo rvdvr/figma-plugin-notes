@@ -22,8 +22,16 @@
     </div>
 
     <div class="add-task">
-      <input class="add-task__input" v-model="newTask" v-on:keyup.enter="addTask">
-      <button class="add-task__btn" @click="addTask">+</button>
+
+      <Editable 
+          class="add-task__input" 
+          :typeInput="'newTask'"
+          :content="newTask"
+          @update="newTask = $event" 
+          @new="addTask"/>
+
+      <!-- <input class="add-task__input" v-model="newTask" v-on:keyup.enter="addTask"> -->
+      <!-- <button class="add-task__btn" @click="addTask">+</button> -->
     </div>
   </div>
 </template>
@@ -104,6 +112,10 @@ export default {
 
 <style lang='scss'>
 @import "./figma-ui/figma-plugin-ds";
+
+.add-task__input {
+  border-bottom: 1px solid rgb(161, 161, 161);
+}
 
 .tasks__edit {
   margin-right: 10px;
