@@ -1,7 +1,10 @@
 <template>
   <div contenteditable="true" 
     @input="update"
-    @blur="save"></div>
+    @blur="save"
+    v-on:keyup.ctrl.13="enter"
+    v-on:keyup.esc="enter"
+    v-on:keyup.ctrl.67="togglecheck"></div>
 </template>
 
 <script>
@@ -11,9 +14,14 @@ export default {
     this.$el.innerText = this.content;
   },
   methods:{
+    enter(event) {
+      event.target.blur();
+    },
+    togglecheck() {
+      this.$emit('checkmode', this.currentIndex);
+    },
     update(event){
       this.$emit('update',event.target.innerText);
-
     },
     save(event) {
       if (event.target.innerText === '') {

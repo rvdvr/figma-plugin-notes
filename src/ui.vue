@@ -5,6 +5,7 @@
         <div class="tasks__item" v-for="(task, index) in tasks" :key="task.id">
           
           <input type="checkbox" 
+            v-if='task.checkMode'
             v-model="task.done" 
             @change="updateStorage"
           >
@@ -16,7 +17,8 @@
             :currentIndex="index"
             @update="task.text = $event" 
             @save="updateStorage"
-            @remove="removeTask"/>
+            @remove="removeTask"
+            @checkmode="toggleCheckbox"/>
 
           <span @click="removeTask(index)" class="add-task__remove">–</span>
         </div>
@@ -32,8 +34,6 @@
           @update="newTask = $event" 
           @new="addTask"/>
 
-      <!-- <input class="add-task__input" v-model="newTask" v-on:keyup.enter="addTask"> -->
-      <!-- <button class="add-task__btn" @click="addTask">+</button> -->
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@
 <script>
 import { dispatch, handleEvent } from "./uiMessageHandler";
 import Editable from "./components/contenteditable.vue";
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
 
 // Add these lines to import the interactive figma-ui components as needed.
 import "./figma-ui/js/selectMenu";
@@ -57,7 +57,7 @@ export default {
   },
   components: {
     Editable,
-    draggable
+    draggable,
   },
   mounted() {
     handleEvent("sendChangedStorage", tasks => {
@@ -68,8 +68,10 @@ export default {
 
   },
   methods: {
+    toggleCheckbox(index) {
+      this.tasks[index].checkMode = !this.tasks[index].checkMode; 
+    },
     contentEdit(value, index) {
-      // const value = e.target.innerText
       this.tasks[index] = value.innerText; 
     },
     endEdit(){
@@ -88,7 +90,7 @@ export default {
           {
             id: Date.parse(new Date()),
             done: false, 
-            inputMode: false, 
+            checkMode: false, 
             text: `${this.newTask}`
           }
         );
