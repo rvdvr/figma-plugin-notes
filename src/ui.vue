@@ -1,17 +1,17 @@
 <template>
   <div>
+    <ResizeWindow />
     <div class="tasks__list">
       <draggable group="tasks" @start="drag=true" @end="drag=false">
         <div class="tasks__item" v-for="(task, index) in tasks" :key="task.id">
           
           <input type="checkbox" 
             v-if='task.checkMode'
-            v-model="task.done" 
-            @change="updateStorage"
-          >
+            v-model="task.done"
+            @change="updateStorage">
 
           <Editable 
-            v-if="!task.inputMode" 
+            v-if="!task.inputMode"
             :class="{done: task.done}"
             :content="task.text"
             :currentIndex="index"
@@ -41,6 +41,8 @@
 <script>
 import { dispatch, handleEvent } from "./uiMessageHandler";
 import Editable from "./components/contenteditable.vue";
+import ResizeWindow from "./components/resizewindow.vue";
+
 import draggable from 'vuedraggable';
 
 // Add these lines to import the interactive figma-ui components as needed.
@@ -58,6 +60,7 @@ export default {
   components: {
     Editable,
     draggable,
+    ResizeWindow
   },
   mounted() {
     handleEvent("sendChangedStorage", tasks => {

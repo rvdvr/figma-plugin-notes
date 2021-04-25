@@ -10,7 +10,7 @@
 <script>
 export default {
   props:['typeInput', 'content', 'currentIndex'],
-  mounted(){
+  mounted() {
     this.$el.innerText = this.content;
   },
   methods:{

@@ -1,9 +1,13 @@
 import { dispatch, handleEvent } from './codeMessageHandler';
 figma.showUI(__html__, { width: 420, height: 500 });
 
-// handleEvent('resizeUI', () => {
-// 	// figma.ui.resize(320, 50)	
-// });
+handleEvent('hideWindow', () => {
+	figma.ui.resize(200, 10)	
+});
+
+handleEvent('showWindow', () => {
+	figma.ui.resize(420, 500)	
+});
 
 
 // send
